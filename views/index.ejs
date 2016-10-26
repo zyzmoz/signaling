@@ -1,0 +1,23 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Socket.IO chat w signaling</title>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="bower/angular/angular.js"></script>
+    <script src="app/app.js"></script>
+    <script src="app/controller.js"></script>
+  </head>
+  <body ng-app="myApp" ng-controller="msgCtrl"  >
+    <video id="myVideo" autoplay="true"></video>
+    </br>
+    <video id="theirVideo" autoplay="true"></video>
+    <ul id="messages">
+      <li ng-repeat="msg in messages">
+        {{msg.msg}}
+      </li>
+    </ul>
+    <form>
+      <input id="m" autocomplete="off" ng-model="msg"/><button ng-click="send(msg)">Send</button>
+    </form>
+  </body>
+</html>

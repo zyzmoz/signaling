@@ -2,6 +2,8 @@ angular.module('myApp')
 
 .controller('msgCtrl', ['$scope', function($scope){
   $scope.messages = [];
+  $scope.signaling_room;
+  $scope.user;
   $scope.socket = null;
   $scope.myVideo = document.getElementById("myVideo");
   $scope.theirVideo = document.getElementById("theirVideo");
@@ -13,14 +15,21 @@ angular.module('myApp')
   };
   var rtcPeerConn;
 
+  $scope.startConnection = function(){
+    //$scope.socket = io.connect();
+    //setting parameters of rooms w/ signal
+    $scope.socket.emit('ready', {chat_room: "room", signal_room: /*"signaling_room"*/$scope.signaling_room });
+    $scope.socket.emit('signal', {type: "user_here", message: "Are you ready", room: /*"signaling_room"*/$scope.signaling_room});
+    console.log('Connect');
+  };
   connect();
 
   function connect(){
     $scope.socket = io.connect();
     //setting parameters of rooms w/ signal
-    $scope.socket.emit('ready', {chat_room: "room", signal_room: "signaling_room" });
-    $scope.socket.emit('signal', {type: "user_here", message: "Are you ready", room: "signaling_room"});
-    console.log('Connect');
+    // $scope.socket.emit('ready', {chat_room: "room", signal_room: /*"signaling_room"*/$scope.signaling_room });
+    // $scope.socket.emit('signal', {type: "user_here", message: "Are you ready", room: /*"signaling_room"*/$scope.signaling_room});
+    // console.log('Connect');
   };
 
   $scope.socket.on('announce', function(data){
@@ -59,7 +68,7 @@ angular.module('myApp')
     rtcPeerConn = new webkitRTCPeerConnection(configuration);
     rtcPeerConn.onicecandidate = function(evt){
       console.log(evt);
-      $scope.socket.emit('signal', {type: 'ice candidate', message: JSON.stringify({'candidate': evt.candidate}), room: 'signaling_room'});
+      $scope.socket.emit('signal', {type: 'ice candidate', message: JSON.stringify({'candidate': evt.candidate}), room: /*'signaling_room'*/$scope.signaling_room});
     };
 
     rtcPeerConn.onnegotiationneeded = function(){
@@ -84,7 +93,7 @@ angular.module('myApp')
 
   function sendLocalDesc(desc){
     rtcPeerConn.setLocalDescription(desc, function(){
-      $scope.socket.emit('signal', {type: 'SDP', message: JSON.stringify({'sdp':rtcPeerConn.localDescription}), room: 'signaling_room'});
+      $scope.socket.emit('signal', {type: 'SDP', message: JSON.stringify({'sdp':rtcPeerConn.localDescription}), room: /*'signaling_room'*/$scope.signaling_room});
     }, logError);
   };
 
@@ -100,7 +109,7 @@ angular.module('myApp')
   });
 
   $scope.send = function(msg){
-    $scope.socket.emit('message', {message: msg, user: 'robot', room: 'room'});
+    $scope.socket.emit('message', {message: msg, user: $scope.user, room: 'room'});
     $scope.msg = '';
     console.log('msg sent');
   };

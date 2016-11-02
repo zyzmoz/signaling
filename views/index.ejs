@@ -17,6 +17,8 @@
         {{msg.msg}}
       </li>
     </ul>
+    <p>User:<input id="user" ng-model="user"/>
+    <p>Room:<input id="room" ng-model="signaling_room"/><button ng-click="startConnection()">Connect</button>
     <form>
       <input id="m" autocomplete="off" ng-model="msg"/><button ng-click="send(msg)">Send</button>
     </form>

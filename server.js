@@ -44,6 +44,6 @@ app.io.on('connection', function(socket){
 });
 
 var port = process.env.PORT || 3000;
-app.listen(3000, function(){
+app.listen(port, function(){
   console.log('Running at 127.0.0.1 : 3000');
 });
